@@ -17,7 +17,7 @@
     const grid = document.getElementById('game-grid');
     for (const g of GAMES) {
       const a = document.createElement('a');
-      a.href = `game.html?game=${encodeURIComponent(g.id)}`;
+      a.href = g.path || `game.html?game=${encodeURIComponent(g.id)}`;
       a.className = 'game-card';
       a.innerHTML = `<span class="icon">&#127918;</span>${g.name}`;
       grid.appendChild(a);

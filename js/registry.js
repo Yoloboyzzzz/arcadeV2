@@ -7,7 +7,7 @@ export const GAMES = [
   { id: 'tetris', name: 'Tetris', module: './js/games/tetris.js' },
   { id: 'invaders', name: 'Space Invaders', module: './js/games/invaders.js' },
   { id: 'flappy', name: 'Flappy Bird', module: './js/games/flappy.js' },
-  { id: 'frogger', name: 'Frogger', module: './js/games/frogger.js' },
+  { id: 'crossy', name: 'Crossy Road', path: './crossy_roads/index.html' },
   { id: '2048', name: '2048', module: './js/games/2048.js' },
   { id: 'doodlejump', name: 'Doodle Jump', module: './js/games/doodlejump.js' },
   { id: 'missile', name: 'Missile Command', module: './js/games/missile.js' },

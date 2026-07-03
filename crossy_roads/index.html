@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>Crossy Road — Neon Arcade</title>
+    <script src="https://unpkg.com/three@0.159.0/build/three.min.js"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        #game-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            padding-top: 8px;
+        }
+
+        #hud {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+
+        #hud-back { color: var(--neon-pink); font-size: 12px; }
+        #hud-score { font-size: 11px; }
+        #hud-best { font-size: 10px; color: #f0f; opacity: 0.85; }
+
+        #canvas-wrap {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 480px;
+            background: #87CEEB;
+            border: 3px solid var(--neon);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+            overflow: hidden;
+        }
+
+        #game-container canvas { display: block; }
+
+        #controls {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .button {
+            padding: 10px 18px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .button:hover {
+            background: rgba(255,255,255,1);
+            transform: translateY(-2px);
+        }
+
+        #end {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            visibility: hidden;
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            z-index: 200;
+        }
+
+        #end h1 { font-size: 32px; margin-bottom: 16px; }
+        #endScore, #endBest { font-size: 18px; margin-bottom: 8px; }
+
+        #retry {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 32px;
+            font-size: 18px;
+        }
+
+        #darkMode {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 100;
+            padding: 8px 14px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 480px) {
+            #controls { bottom: 24px; }
+            .button { padding: 8px 16px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+  <div id="game-page">
+    <div id="hud">
+      <a href="../index.html" id="hud-back">&laquo; MENU</a>
+      <span id="hud-score">SCORE 0</span>
+      <span id="hud-best">BEST 0</span>
+    </div>
+    <div id="canvas-wrap">
+      <div id="game-container"></div>
+      <div id="end">
+          <h1>Game Over!</h1>
+          <p id="endScore">Score: 0</p>
+          <p id="endBest">Best: 0</p>
+          <button id="retry" class="button">Try Again</button>
+      </div>
+      <button id="darkMode" class="button">Dark Mode</button>
+      <div id="controls">
+          <button id="left" class="button">&larr;</button>
+          <button id="forward" class="button">&uarr;</button>
+          <button id="backward" class="button">&darr;</button>
+          <button id="right" class="button">&rarr;</button>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="game.js"></script>
+</body>
+</html>
