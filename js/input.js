@@ -28,6 +28,28 @@ class InputManager {
     window.addEventListener('keyup', (e) => this._handleKey(e, false));
 
     this._buildTouchControls();
+    this._buildKeyboardFocusTrap();
+  }
+
+  // iOS Safari only dispatches external-keyboard key events to the page when
+  // a focused, editable element exists — without this, BLE keyboard input
+  // (like the arcade pad) is swallowed by Safari and never reaches us.
+  _buildKeyboardFocusTrap() {
+    const trap = document.createElement('input');
+    trap.setAttribute('aria-hidden', 'true');
+    trap.setAttribute('inputmode', 'none');
+    trap.autocomplete = 'off';
+    trap.style.position = 'fixed';
+    trap.style.top = '-1000px';
+    trap.style.left = '-1000px';
+    trap.style.opacity = '0';
+    document.body.appendChild(trap);
+
+    const refocus = () => trap.focus({ preventScroll: true });
+    refocus();
+    document.addEventListener('touchend', refocus);
+    document.addEventListener('mousedown', refocus);
+    trap.addEventListener('blur', refocus);
   }
 
   _handleKey(e, isDown) {

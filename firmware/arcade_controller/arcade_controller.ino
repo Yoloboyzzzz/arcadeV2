@@ -27,14 +27,15 @@
 #include <BleKeyboard.h>
 
 // ---- Pin assignment — change to match your wiring ----
-const int PIN_LEFT = 13;
-const int PIN_RIGHT = 12;
-const int PIN_UP = 14;
-const int PIN_DOWN = 27;
-const int PIN_A = 26; // Action 1
-const int PIN_B = 25; // Action 2
+const int PIN_LEFT = 2;
+const int PIN_RIGHT = 3;
+const int PIN_UP = 4;
+const int PIN_DOWN = 6;
+const int PIN_A = 7; // Action 1
+const int PIN_B = 9; // Action 2
 
 struct Button {
+  const char *name;
   int pin;
   uint8_t key;      // key code sent over BLE HID
   bool lastRaw;     // last raw (debounced-pending) reading
@@ -43,12 +44,12 @@ struct Button {
 };
 
 Button buttons[] = {
-  { PIN_LEFT, KEY_LEFT_ARROW, false, false, 0 },
-  { PIN_RIGHT, KEY_RIGHT_ARROW, false, false, 0 },
-  { PIN_UP, KEY_UP_ARROW, false, false, 0 },
-  { PIN_DOWN, KEY_DOWN_ARROW, false, false, 0 },
-  { PIN_A, 'z', false, false, 0 },
-  { PIN_B, 'x', false, false, 0 },
+  { "LEFT", PIN_LEFT, KEY_LEFT_ARROW, false, false, 0 },
+  { "RIGHT", PIN_RIGHT, KEY_RIGHT_ARROW, false, false, 0 },
+  { "UP", PIN_UP, KEY_UP_ARROW, false, false, 0 },
+  { "DOWN", PIN_DOWN, KEY_DOWN_ARROW, false, false, 0 },
+  { "ACTION 1", PIN_A, 'z', false, false, 0 },
+  { "ACTION 2", PIN_B, 'x', false, false, 0 },
 };
 const int NUM_BUTTONS = sizeof(buttons) / sizeof(buttons[0]);
 const unsigned long DEBOUNCE_MS = 15;
@@ -57,20 +58,22 @@ BleKeyboard bleKeyboard("Arcade Pad", "Fablab", 100);
 
 void setup() {
   Serial.begin(115200);
+  unsigned long serialWaitStart = millis();
+  while (!Serial && (millis() - serialWaitStart) < 3000) {
+    delay(10); // give the USB CDC connection a moment to enumerate
+  }
   for (int i = 0; i < NUM_BUTTONS; i++) {
     pinMode(buttons[i].pin, INPUT_PULLUP);
   }
   bleKeyboard.begin();
   Serial.println("Arcade Pad booting — waiting for BLE pairing...");
+  Serial.println("TEST: serial output is working!");
 }
 
 void loop() {
-  if (!bleKeyboard.isConnected()) {
-    delay(50);
-    return;
-  }
-
+  bool connected = bleKeyboard.isConnected();
   unsigned long now = millis();
+
   for (int i = 0; i < NUM_BUTTONS; i++) {
     Button &b = buttons[i];
     bool raw = digitalRead(b.pin) == LOW; // active-low (pressed = LOW)
@@ -82,10 +85,13 @@ void loop() {
 
     if ((now - b.lastChange) > DEBOUNCE_MS && raw != b.state) {
       b.state = raw;
-      if (b.state) {
-        bleKeyboard.press(b.key);
-      } else {
-        bleKeyboard.release(b.key);
+      Serial.printf("%s %s\n", b.name, b.state ? "pressed" : "released");
+      if (connected) {
+        if (b.state) {
+          bleKeyboard.press(b.key);
+        } else {
+          bleKeyboard.release(b.key);
+        }
       }
     }
   }
