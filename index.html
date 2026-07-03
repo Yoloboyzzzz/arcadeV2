@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Neon Arcade</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <h1 class="arcade-title">NEON ARCADE</h1>
+  <p class="subtitle">6-BUTTON CLASSICS &mdash; PICK A GAME</p>
+  <div class="game-grid" id="game-grid"></div>
+
+  <script type="module">
+    import { GAMES } from './js/registry.js';
+
+    const grid = document.getElementById('game-grid');
+    for (const g of GAMES) {
+      const a = document.createElement('a');
+      a.href = `game.html?game=${encodeURIComponent(g.id)}`;
+      a.className = 'game-card';
+      a.innerHTML = `<span class="icon">&#127918;</span>${g.name}`;
+      grid.appendChild(a);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  --neon: #0ff;
+  --neon-pink: #f0f;
+  --bg: #05050a;
+  --card: #12121c;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--neon);
+  font-family: 'Press Start 2P', monospace;
+  height: 100%;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Scanline overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.03) 0px,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 2px,
+    transparent 3px
+  );
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ---- Menu (index.html) ---- */
+.arcade-title {
+  text-align: center;
+  font-size: clamp(20px, 6vw, 40px);
+  color: var(--neon-pink);
+  text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+  padding: 30px 10px 10px;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 10px;
+  color: #8ff;
+  opacity: 0.7;
+  padding-bottom: 20px;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.game-card {
+  background: var(--card);
+  border: 2px solid var(--neon);
+  border-radius: 8px;
+  padding: 20px 10px;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.6;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.game-card:active,
+.game-card:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 16px var(--neon);
+}
+.game-card .icon { font-size: 28px; display: block; margin-bottom: 10px; }
+
+/* ---- Game host page ---- */
+#game-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  padding-top: 8px;
+}
+
+#hud {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 12px;
+}
+
+#hud-back { color: var(--neon-pink); font-size: 12px; }
+#hud-score { font-size: 11px; }
+#hud-best { font-size: 10px; color: #f0f; opacity: 0.85; }
+
+#canvas-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+canvas#game-canvas {
+  background: #000;
+  border: 3px solid var(--neon);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+  image-rendering: pixelated;
+}
+
+#hud-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: var(--neon-pink);
+  font-size: 14px;
+  text-align: center;
+  white-space: pre-line;
+  align-items: center;
+  justify-content: center;
+  display: none;
+}
+#hud-overlay.show { display: flex; }
+
+/* ---- Touch controls ---- */
+#touch-controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 10px 16px 20px;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.tc-dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 44px);
+  grid-template-rows: repeat(3, 44px);
+  gap: 2px;
+  pointer-events: auto;
+}
+.tc-up { grid-column: 2; grid-row: 1; }
+.tc-left { grid-column: 1; grid-row: 2; }
+.tc-right { grid-column: 3; grid-row: 2; }
+.tc-down { grid-column: 2; grid-row: 3; }
+
+.tc-actions {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  pointer-events: auto;
+}
+
+.tc-btn {
+  background: rgba(0, 255, 255, 0.12);
+  border: 2px solid var(--neon);
+  color: var(--neon);
+  border-radius: 8px;
+  font-size: 16px;
+  touch-action: none;
+}
+.tc-dpad .tc-btn { width: 44px; height: 44px; }
+.tc-action {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border-color: var(--neon-pink);
+  color: var(--neon-pink);
+  background: rgba(255, 0, 255, 0.12);
+  font-size: 18px;
+}
+.tc-btn.active {
+  background: var(--neon);
+  color: #000;
+}
+.tc-action.active {
+  background: var(--neon-pink);
+  color: #000;
+}
+
+@media (min-width: 700px) {
+  #touch-controls { opacity: 0.35; }
+  #touch-controls:hover { opacity: 1; }
+}

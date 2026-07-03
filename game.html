@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Neon Arcade</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="game-page">
+    <div id="hud">
+      <a href="index.html" id="hud-back">&laquo; MENU</a>
+      <span id="hud-score">SCORE 0</span>
+      <span id="hud-best">BEST 0</span>
+    </div>
+    <div id="canvas-wrap">
+      <canvas id="game-canvas"></canvas>
+      <div id="hud-overlay"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { input } from './js/input.js';
+    import { createEngine } from './js/engine.js';
+    import { getGame } from './js/registry.js';
+
+    const params = new URLSearchParams(location.search);
+    const gameId = params.get('game');
+    const meta = getGame(gameId);
+
+    if (!meta) {
+      document.getElementById('game-page').innerHTML =
+        '<p style="padding:40px;text-align:center;">Unknown game.<br><a href="index.html">&laquo; back to menu</a></p>';
+    } else {
+      document.title = `${meta.name} — Neon Arcade`;
+      const canvas = document.getElementById('game-canvas');
+      const engine = createEngine({ canvas, input, gameId, onExit: () => (location.href = 'index.html') });
+      input.reset();
+      import(meta.module).then((mod) => {
+        engine.start((ctx, inp, api) => mod.default.init(ctx, inp, api));
+      });
+    }
+  </script>
+</body>
+</html>
