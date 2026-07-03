@@ -1,0 +1,40 @@
+{
+  "name": "arkanoid-game",
+  "version": "1.0.0",
+  "description": "A modern implementation of the classic Arkanoid/Breakout game built with HTML5, CSS3, and JavaScript",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "npx http-server -p 8000 -o",
+    "dev": "npx live-server --port=8000 --open=/",
+    "build": "echo 'No build process required - static files only'",
+    "test": "echo 'No tests specified' && exit 0"
+  },
+  "keywords": [
+    "game",
+    "arkanoid",
+    "breakout",
+    "html5",
+    "javascript",
+    "canvas",
+    "arcade",
+    "retro",
+    "web-game"
+  ],  "author": "lefrasso <lefrasso@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lefrasso/arkanoid-game.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lefrasso/arkanoid-game/issues"
+  },
+  "homepage": "https://github.com/lefrasso/arkanoid-game#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}
