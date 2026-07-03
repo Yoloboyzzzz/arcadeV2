@@ -3,7 +3,7 @@
 export const GAMES = [
   { id: 'snake', name: 'Snake', module: './js/games/snake.js' },
   { id: 'pong', name: 'Pong', module: './js/games/pong.js' },
-  { id: 'breakout', name: 'Breakout', module: './js/games/breakout.js' },
+  { id: 'arkanoid', name: 'Arkanoid', module: './js/games/arkanoid.js' },
   { id: 'tetris', name: 'Tetris', module: './js/games/tetris.js' },
   { id: 'invaders', name: 'Space Invaders', module: './js/games/invaders.js' },
   { id: 'flappy', name: 'Flappy Bird', module: './js/games/flappy.js' },

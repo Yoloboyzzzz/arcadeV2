@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARKANOID</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Orbitron:wght@400;500;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body data-theme="modern">
+    <div id="initialScreen" class="screen active">
+        <div class="initial-container">
+            <header class="initial-header">
+                <h1 class="game-title">ARKANOID</h1>
+                <p class="subtitle">Breakout Evolved</p>
+                <p class="version-info">v1.6.0</p>
+            </header>
+
+            <div class="settings-flex-container">
+                <div class="settings-main">
+                    <div class="input-group">
+                        <label for="playerName">Player Name:</label>
+                        <input type="text" id="playerName" value="Player1" maxlength="15">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Game Theme:</label>
+                        <div id="themeSelector" class="theme-selector">
+                            <label class="theme-option">
+                                <input type="radio" name="gameTheme" value="modern" checked>
+                                <span class="theme-name">Modern</span>
+                            </label>
+                            <label class="theme-option">
+                                <input type="radio" name="gameTheme" value="dark">
+                                <span class="theme-name">Dark</span>
+                            </label>
+                            <label class="theme-option">
+                                <input type="radio" name="gameTheme" value="retro">
+                                <span class="theme-name">Retro</span>
+                            </label>
+                            <label class="theme-option">
+                                <input type="radio" name="gameTheme" value="futuristic">
+                                <span class="theme-name">Futuristic</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="gameplay-settings">
+                        <h3>Gameplay Settings</h3>
+                        <div class="input-group range-group">
+                            <label for="paddleSpeed">Paddle Speed:</label>
+                            <input type="range" id="paddleSpeed" min="5" max="20" value="10" step="1">
+                            <span id="paddleSpeedValue" class="range-value">10</span>
+                        </div>
+                        <div class="input-group range-group">
+                            <label for="ballSpeed">Base Ball Speed:</label>
+                            <input type="range" id="ballSpeed" min="2" max="10" value="5" step="0.5">
+                            <span id="ballSpeedValue" class="range-value">5</span>
+                        </div>
+                        <button id="applySettingsBtn" class="btn">Apply Settings</button>
+                    </div>
+                     <button id="startGameBtn" class="btn btn-large btn-start">Start Game</button>
+                     <button id="creditsBtn" class="btn btn-small">Disclaimer & Credits</button>
+                </div>
+
+                <div class="game-info-panel">
+                    <h3>Game Info</h3>
+                    <div class="info-section">
+                        <h4>Controls:</h4>
+                        <ul>
+                            <li>Mouse/Touch: Move Paddle</li>
+                            <li>Arrow Keys: Move Paddle</li>
+                            <li>Space/Tap Screen: Launch Ball / Fire Gun</li>
+                            <li>'P'/Button: Pause/Resume</li>
+                            <li>'S': Toggle Slow Speed</li>
+                            <li>'R': Reset Ball / Restart Game</li>
+                            <li>'M': Toggle Sound</li>
+                            <li>'T': Toggle Debug Console</li>
+                        </ul>
+                    </div>
+                    <div class="info-section">
+                        <h4>Block Types:</h4>
+                        <ul>
+                            <li><span class="block-example block-normal"></span> Normal: 1 Hit</li>
+                            <li><span class="block-example block-strong"></span> Strong: 2 Hits</li>
+                            <li><span class="block-example block-indestructible"></span> Indestructible</li>
+                        </ul>
+                    </div>
+                    <div class="info-section">
+                        <h4>Power-ups:</h4>
+                        <p>Extend Paddle, Multi-Ball, Paddle Gun, Slow Ball, Extra Life, Shrink Paddle, Fast Ball</p>
+                    </div>
+                    <div class="info-section">
+                        <h4>Scoring:</h4>
+                        <p>Normal Brick: +10</p>
+                        <p>Strong Brick: +25</p>
+                        <p>+1 Life every 250 points</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loadingScreen" class="screen">
+        <div class="loading-container">
+            <h2 class="loading-title">Initializing Game...</h2>
+            <ul id="loadingSteps" class="loading-steps-list">
+                <li data-step="assets">Loading Assets... <span class="status-indicator"></span></li>
+                <li data-step="ui">Setting Up UI... <span class="status-indicator"></span></li>
+                <li data-step="bricks">Defining Bricks... <span class="status-indicator"></span></li>
+                <li data-step="physics">Initializing Physics Engine... <span class="status-indicator"></span></li>
+                <li data-step="levels">Loading Level Data... <span class="status-indicator"></span></li>
+                <li data-step="audio">Preparing Audio Systems... <span class="status-indicator"></span></li>
+                <li data-step="ready">Finalizing Setup... <span class="status-indicator"></span></li>
+            </ul>
+            <div class="spinner"></div>
+            <p class="loading-message">Get Ready to Break Out!</p>
+        </div>
+    </div>
+
+    <div id="gameScreen" class="screen">
+        <div id="hud" class="hud-container">
+            <div class="hud-item">Player: <span id="hudPlayerName" class="hud-value">Player1</span></div>
+            <div class="hud-item">Score: <span id="hudScore" class="hud-value">0</span></div>
+            <div class="hud-item">Level: <span id="hudLevel" class="hud-value">1</span></div>
+            <div class="hud-item">Lives: <span id="hudLives" class="hud-value">3</span></div>
+            <div class="hud-item">Speed: <span id="hudGameSpeed" class="hud-value">1.0x</span></div>
+            <div class="hud-item">Sound: <span id="hudSoundStatus" class="hud-value">ON</span></div>
+        </div>
+
+        <div id="powerUpLegend" class="power-up-legend">
+            <h4>Power-Ups Key:</h4>
+            <ul>
+                </ul>
+        </div>
+
+        <div id="powerUpStatusBar" class="power-up-status-bar">
+            </div>
+
+        <div id="gameCanvasContainer">
+            <canvas id="gameCanvas"></canvas>
+        </div>
+
+        <div id="gameAnnouncement" class="game-announcement">
+            <p id="announcementText"></p>
+        </div>
+
+        <div id="gameScreenControls" class="game-screen-controls">
+            <button id="pauseResumeGameBtn" class="btn game-btn">Pause</button>
+            <button id="resetGameBtn" class="btn game-btn">Reset Game</button>
+            <button id="backToMenuBtn" class="btn game-btn">Back to Menu</button>
+        </div>
+
+        <div id="pausedOverlay" class="overlay-message">
+            <div class="overlay-content">
+                <h2>PAUSED</h2>
+                <p>Press 'P', Tap Resume, or Tap Screen to Continue</p>
+            </div>
+        </div>
+        <div id="gameOverOverlay" class="overlay-message">
+            <div class="overlay-content">
+                <h2>GAME OVER</h2>
+                <p>Final Score: <span id="finalScore" class="hud-value">0</span></p>
+                <button id="restartGameFromGameOverBtn" class="btn">Restart Game</button>
+                 <button id="menuFromGameOverBtn" class="btn">Back to Menu</button>
+            </div>
+        </div>
+        <div id="levelCompleteOverlay" class="overlay-message">
+            <div class="overlay-content">
+                <h2>LEVEL COMPLETE!</h2>
+                <p>Score: <span id="levelCompleteScore" class="hud-value">0</span></p>
+                <button id="nextLevelBtn" class="btn">Next Level</button>
+            </div>
+        </div>
+        <div id="gameStartPromptOverlay" class="overlay-message active">
+            <div class="overlay-content">
+                <h2>LEVEL <span id="promptLevel">1</span></h2>
+                <p>Press SPACE or TAP Screen to Launch Ball</p> </div>
+        </div>
+    </div>
+
+    <div id="creditsOverlay" class="overlay-message">
+        <div class="overlay-content">
+            <h2>Disclaimer & Credits</h2>
+            <p>This game is a fan-made project inspired by Arkanoid.</p>
+            <p>Development & Original Concept: Leandro</p>
+            <p>Additional features and modifications in v1.6.0 implemented by AI.</p>
+            <p>Sound effects and music generated using Tone.js.</p>
+            <button id="closeCreditsBtn" class="btn">Close</button>
+        </div>
+    </div>
+
+    <div id="debugConsole" class="debug-console hidden"> <div class="debug-header">
+            <span class="debug-title">Debug Console</span>
+            <button id="toggleDebugVisibilityBtn" class="btn-debug-toggle" title="Toggle Debug Console (T)">&#x2715;</button>
+        </div>
+        <div class="debug-stats">
+            <span>FPS: <span id="debugFps" class="debug-value">0</span></span>
+            <span>Balls: <span id="debugBalls" class="debug-value">0</span></span>
+            <span>PowerUps: <span id="debugPowerUps" class="debug-value">0</span></span>
+            <span>Bullets: <span id="debugBullets" class="debug-value">0</span></span>
+        </div>
+        <div id="debugLog" class="debug-log-area">
+            </div>
+        <div class="debug-actions">
+            <button id="resetGameDebugBtn" class="btn btn-debug">Reset Game (Debug)</button>
+            <button id="clearLogBtn" class="btn btn-debug">Clear Log</button>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

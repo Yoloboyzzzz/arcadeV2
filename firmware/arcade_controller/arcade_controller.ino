@@ -25,6 +25,7 @@
 */
 
 #include <BleKeyboard.h>
+#include <esp_gap_ble_api.h>
 
 // ---- Pin assignment — change to match your wiring ----
 const int PIN_LEFT = 2;
@@ -56,6 +57,22 @@ const unsigned long DEBOUNCE_MS = 15;
 
 BleKeyboard bleKeyboard("Arcade Pad", "Fablab", 100);
 
+// Wipes stored BLE bond keys so every boot starts with a clean pairing
+// identity. Needed while iOS/ESP32 bonds keep going stale during dev
+// (GATT_INSUF_AUTHENTICATION); remove once pairing is stable and you
+// want the pad to reconnect to a previously-paired phone automatically.
+void clearBondedDevices() {
+  int count = esp_ble_get_bond_device_num();
+  if (count <= 0) return;
+  esp_ble_bond_dev_t *devices = (esp_ble_bond_dev_t *)malloc(sizeof(esp_ble_bond_dev_t) * count);
+  esp_ble_get_bond_device_list(&count, devices);
+  for (int i = 0; i < count; i++) {
+    esp_ble_remove_bond_device(devices[i].bd_addr);
+  }
+  free(devices);
+  Serial.printf("Cleared %d stored BLE bond(s)\n", count);
+}
+
 void setup() {
   Serial.begin(115200);
   unsigned long serialWaitStart = millis();
@@ -66,12 +83,20 @@ void setup() {
     pinMode(buttons[i].pin, INPUT_PULLUP);
   }
   bleKeyboard.begin();
+  delay(200); // let the BT stack finish initializing before touching bond storage
+  clearBondedDevices();
   Serial.println("Arcade Pad booting — waiting for BLE pairing...");
   Serial.println("TEST: serial output is working!");
 }
 
+bool wasConnected = false;
+
 void loop() {
   bool connected = bleKeyboard.isConnected();
+  if (connected != wasConnected) {
+    wasConnected = connected;
+    Serial.println(connected ? "BLE: connected" : "BLE: disconnected");
+  }
   unsigned long now = millis();
 
   for (int i = 0; i < NUM_BUTTONS; i++) {

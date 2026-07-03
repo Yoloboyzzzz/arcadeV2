@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arkanoid - Screenshot Helper</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+        }
+        
+        .screenshot-guide {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .game-container {
+            margin: 20px 0;
+            border: 2px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        iframe {
+            border: none;
+            display: block;
+        }
+        
+        .instructions {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .theme-selector {
+            margin: 20px 0;
+        }
+        
+        .theme-selector button {
+            margin: 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #4a4a4a;
+            color: white;
+            cursor: pointer;
+        }
+          .theme-selector button:hover {
+            background: #5a5a5a;
+        }
+        
+        .text-left {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="screenshot-guide">
+        <h1>📸 Arkanoid Screenshot Helper</h1>
+        
+        <div class="instructions">
+            <h3>How to Take Screenshots:</h3>
+            <ol class="text-left">
+                <li>Open the game in the iframe below</li>
+                <li>Use different themes to capture variety</li>
+                <li>Take screenshots of:
+                    <ul>
+                        <li>Start screen with different themes</li>
+                        <li>Gameplay with different themes</li>
+                        <li>Power-ups in action</li>
+                        <li>Debug console (press 'D')</li>
+                    </ul>
+                </li>
+                <li>Use Windows Snipping Tool (Win + Shift + S)</li>
+                <li>Save screenshots in the screenshots/ folder</li>
+            </ol>
+        </div>
+        
+        <div class="theme-selector">
+            <h3>Quick Theme Test:</h3>
+            <p>Click buttons to see how themes look (for reference)</p>
+            <button onclick="showTheme('modern')">Modern Theme</button>
+            <button onclick="showTheme('dark')">Dark Theme</button>
+            <button onclick="showTheme('retro')">Retro Theme</button>
+            <button onclick="showTheme('futuristic')">Futuristic Theme</button>
+        </div>
+        
+        <div class="game-container">
+            <iframe src="index.html" width="800" height="600" id="gameFrame" title="Arkanoid Game for Screenshots"></iframe>
+        </div>
+        
+        <div class="instructions">
+            <h3>Recommended Screenshots:</h3>
+            <ul class="text-left">
+                <li><strong>gameplay-modern.png</strong> - Game in progress with modern theme</li>
+                <li><strong>start-screen-themes.png</strong> - Collage of start screen in different themes</li>
+                <li><strong>powerups-demo.png</strong> - Showing different power-ups</li>
+                <li><strong>debug-console.png</strong> - Debug console open</li>
+                <li><strong>responsive-mobile.png</strong> - Mobile view (resize browser)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function showTheme(theme) {
+            // This is just for reference - the actual theme switching happens in the game
+            const colors = {
+                modern: { bg: '#f0f0f0', accent: '#007bff' },
+                dark: { bg: '#121212', accent: '#ff6b6b' },
+                retro: { bg: '#2d4a22', accent: '#00ff00' },
+                futuristic: { bg: '#0a0a2e', accent: '#00ffff' }
+            };
+            
+            if (colors[theme]) {
+                document.body.style.background = colors[theme].bg;
+                document.querySelector('.instructions').style.background = colors[theme].accent + '20';
+            }
+        }
+    </script>
+</body>
+</html>
