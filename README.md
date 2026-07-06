@@ -1,4 +1,4 @@
-# Neon Arcade
+# Neon ArcadeV2
 
 A browser-based arcade of classic games, built to be controlled by a **6-button
 ESP32 Bluetooth controller** (Left, Right, Up, Down, Action 1, Action 2), and
