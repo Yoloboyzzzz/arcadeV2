@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Doodle Jump — Neon Arcade</title>
+<link rel="stylesheet" href="../css/style.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="game-page">
+    <div id="hud">
+      <a href="../index.html" id="hud-back">&laquo; MENU</a>
+    </div>
+    <div id="canvas-wrap">
+      <div class="container">
+        <canvas id="canvas">Aww, your browser doesn't support HTML5!</canvas>
+        <div id="mainMenu">
+          <h1>doodle jump</h1>
+          <p class="info">&larr; &rarr; or the d-pad to move &mdash; A / space to (re)start</p>
+          <a class="button" href="javascript:init()">Play</a>
+        </div>
+        <div id="gameOverMenu">
+          <h1>game over!</h1>
+          <h3 id="go_score">you scored 0 points</h3>
+          <a class="button" href="javascript:reset()">Restart</a>
+        </div>
+        <img id="sprite" src="sprites.png"/>
+        <div id="scoreBoard">
+          <p id="score">0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+
+  <script type="module">
+    // Doodle jump only listens for real DOM keydown/keyup events (37/39/32).
+    // Bridge the arcade's shared input manager (BLE pad, on-screen touch
+    // d-pad) into synthetic key events so it drives the game too.
+    import { input } from '../js/input.js';
+    input.reset();
+
+    function fireKey(type, keyCode) {
+      const ev = new Event(type, { bubbles: true, cancelable: true });
+      Object.defineProperty(ev, 'keyCode', { get: () => keyCode });
+      Object.defineProperty(ev, 'which', { get: () => keyCode });
+      document.dispatchEvent(ev);
+    }
+
+    const ARROW_KEYCODE = { LEFT: 37, RIGHT: 39 };
+    Object.keys(ARROW_KEYCODE).forEach((btn) => {
+      const code = ARROW_KEYCODE[btn];
+      input.onPress(btn, () => fireKey('keydown', code));
+      input.onRelease(btn, () => fireKey('keyup', code));
+    });
+    input.onPress('A', () => fireKey('keydown', 32)); // space — (re)start
+  </script>
+
+</body>
+</html>
