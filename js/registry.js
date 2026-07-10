@@ -10,7 +10,7 @@ export const GAMES = [
   { id: 'crossy', name: 'Crossy Road', path: './crossy_roads/index.html' },
   { id: 'pacman', name: 'Pacman', path: './pacman/index.html' },
   { id: '2048', name: '2048', module: './js/games/2048.js' },
-  { id: 'doodlejump', name: 'Doodle Jump', module: './js/games/doodlejump.js' },
+  { id: 'doodlejump', name: 'Doodle Jump', path: './doodle-jump/index.html' },
   { id: 'missile', name: 'Missile Command', module: './js/games/missile.js' },
   { id: 'asteroids', name: 'Asteroids', module: './js/games/asteroids.js' },
   { id: 'runner', name: 'Runner', module: './js/games/runner.js' },
