@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Pacman — Neon Arcade</title>
+<link rel="stylesheet" href="../css/style.css" />
+<style>
+  @font-face {
+    font-family: 'BDCartoonShoutRegular';
+    src: url('BD_Cartoon_Shout-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  #shim {
+    font-family: BDCartoonShoutRegular;
+    position: absolute;
+    visibility: hidden;
+  }
+
+  #game-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    padding-top: 8px;
+  }
+
+  #hud {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 12px;
+    font-size: 12px;
+  }
+
+  #hud-back { color: var(--neon-pink); font-size: 12px; }
+
+  #canvas-wrap {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #pacman {
+    position: relative;
+    height: 450px;
+    width: 342px;
+    border: 3px solid var(--neon);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+    overflow: hidden;
+  }
+</style>
+</head>
+
+<body>
+  <div id="shim">shim for font face</div>
+
+  <div id="game-page">
+    <div id="hud">
+      <a href="../index.html" id="hud-back">&laquo; MENU</a>
+    </div>
+    <div id="canvas-wrap">
+      <div id="pacman"></div>
+    </div>
+  </div>
+
+  <script src="pacman.js"></script>
+  <script src="modernizr-1.5.min.js"></script>
+
+  <script>
+    var el = document.getElementById("pacman");
+
+    if (Modernizr.canvas && Modernizr.localstorage &&
+        Modernizr.audio && (Modernizr.audio.ogg || Modernizr.audio.mp3)) {
+      window.setTimeout(function () { PACMAN.init(el, "./"); }, 0);
+    } else {
+      el.innerHTML = "Sorry, needs a decent browser<br /><small>" +
+        "(firefox 3.6+, Chrome 4+, Opera 10+ and Safari 4+)</small>";
+    }
+  </script>
+
+  <script type="module">
+    // Pacman only listens for real DOM keydown events (arrow keys + N/S/P
+    // keyCodes). Bridge the arcade's shared input manager (BLE pad, on-screen
+    // touch d-pad) into synthetic keydown events so it drives the game too.
+    import { input } from '../js/input.js';
+    input.reset();
+
+    function fireKey(keyCode) {
+      const ev = new Event('keydown', { bubbles: true, cancelable: true });
+      Object.defineProperty(ev, 'keyCode', { get: () => keyCode });
+      Object.defineProperty(ev, 'which', { get: () => keyCode });
+      document.dispatchEvent(ev);
+    }
+
+    const ARROW_KEYCODE = { LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 };
+    Object.keys(ARROW_KEYCODE).forEach((btn) => {
+      input.onPress(btn, () => fireKey(ARROW_KEYCODE[btn]));
+    });
+    input.onPress('A', () => fireKey(78)); // N — start / restart game
+    input.onPress('B', () => fireKey(80)); // P — pause
+  </script>
+
+</body>
+</html>
